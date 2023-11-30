@@ -15,3 +15,12 @@ export const verifyClientData = (clientData) => {
     return e
   }
 }
+
+// verificar datos para login
+export const verifyPartialData = (userData) => {
+  try {
+    return userSchema.partial({ name: true, username: true }).parse(userData)
+  } catch (e) {
+    return e
+  }
+}

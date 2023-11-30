@@ -1,8 +1,8 @@
 import User from '../models/auth.js'
 import { rm } from 'node:fs/promises'
-import { hash } from 'bcrypt'
+import { compare, hash } from 'bcrypt'
 import { uploadSingleImage } from '../libs/cloudinary.js'
-import { verifyClientData } from '../libs/zod.js'
+import { verifyClientData, verifyPartialData } from '../libs/zod.js'
 import { createTokenSession } from '../helpers/auth.js'
 import { ONE_HOUR } from '../settings.js'
 
@@ -78,5 +78,31 @@ export const createUser = async (req, res) => {
 
 // logear a un usuario
 export const loginUser = async (req, res) => {
+  const userData = req.body
 
+  const validatedData = verifyPartialData(userData)
+
+  if (validatedData.issues) return res.status(500).json(validatedData.issues)
+
+  const { email, password } = validatedData
+
+  try {
+    // verificar si el usuario existe en bdd
+    const user = await User.findOne({ email })
+
+    if (!user) return res.status(404).json({ error: 'Algunos datos estan mal, por favor revísalos' })
+
+    // comparar la contraseña
+    const isMatch = await compare(password, user.passwordHashed)
+
+    if (!isMatch) return res.status(401).json({ error: 'Algunos datos estan mal, por favor revísalos' })
+
+    // crear token de sesión
+    const token = createTokenSession(user)
+
+    res.cookie('session', token, COOKIE_CONFIG)
+    return res.json(user)
+  } catch (e) {
+    return res.status(500).json(e)
+  }
 }
