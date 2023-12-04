@@ -3,6 +3,7 @@ import { config } from 'dotenv'
 config()
 
 export const port = process.env.PORT ?? 3000
+export const clientHost = process.env.CLIENT_HOST
 export const jwtSecret = process.env.JWT_SECRET
 
 // cloudinary
