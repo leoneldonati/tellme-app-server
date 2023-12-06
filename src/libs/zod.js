@@ -6,6 +6,18 @@ const userSchema = z.object({
   password: z.string(),
   email: z.string().email()
 })
+const postSchema = z.object({
+  title: z.string(),
+  description: z.string()
+})
+
+export const verifyPostData = (postData) => {
+  try {
+    return postSchema.parse(postData)
+  } catch (e) {
+    return e
+  }
+}
 
 // verificar datos del cliente
 export const verifyClientData = (clientData) => {

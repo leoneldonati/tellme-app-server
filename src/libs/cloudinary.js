@@ -22,3 +22,11 @@ export const uploadSingleImage = async (path, options) => {
     return e.error
   }
 }
+
+export const uploadPostsImages = async (images, options) => {
+  if (Object.keys(images).length === 1) return [await uploadSingleImage(images.tempFilePath, options)]
+
+  const imagesArray = Promise.all(images.map(async image => await uploadSingleImage(image.tempFilePath, options)))
+
+  return imagesArray
+}
