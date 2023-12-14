@@ -11,5 +11,5 @@ export const connectDb = () => {
   connect(DB_URL, DB_CONFIG)
     .then(({ connection }) => console.log(`aplicacion conectada a base de datos: ${connection.db.databaseName}`))
     .catch(err => console.log(err))
-    .finally(() => console.log('finished'))
+    .finally(() => console.log('conexion finalizada'))
 }

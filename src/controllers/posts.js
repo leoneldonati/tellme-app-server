@@ -55,6 +55,7 @@ export const addPost = async (req, res) => {
 export const getPosts = async (req, res) => {
   const quantity = Number(req.params?.quantity)
 
+  if (!quantity) return res.status(400).json({ error: 'Debes agregar el parametro de cantidad de posts!' })
   try {
     const posts = await Post.find().limit(quantity)
 
@@ -62,5 +63,19 @@ export const getPosts = async (req, res) => {
   } catch (e) {
     console.error(e)
     res.status(500).json({ error: e })
+  }
+}
+
+// obtener todos los posts del usuario
+export const getUserPosts = async (req, res) => {
+  const userId = req.userInfo?._id
+
+  try {
+    const userPosts = await Post.find({ userId })
+
+    if (!userPosts) return res.status(404).json({ error: 'No hemos encontrado ninguna publicacion tuya!' })
+    res.json(userPosts)
+  } catch (e) {
+    console.log(e)
   }
 }

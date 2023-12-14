@@ -4,6 +4,7 @@ import { verifyTokenSession } from '../helpers/auth.js'
 export const verifyClientSession = (req, res, next) => {
   const token = req.cookies?.session
 
+  console.log()
   if (!token) return res.status(403).json({ error: 'La sesion ha expirado' })
 
   const decodedToken = verifyTokenSession(token)

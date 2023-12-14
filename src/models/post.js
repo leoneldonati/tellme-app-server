@@ -14,9 +14,9 @@ const postSchema = new Schema({
   images: {
     type: []
   },
-  user: {
+  userId: {
     ref: 'User',
-    type: {}
+    type: Schema.ObjectId
   },
   likes: {
     type: [Schema.ObjectId]
